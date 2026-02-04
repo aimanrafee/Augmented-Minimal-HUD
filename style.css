@@ -1,5 +1,6 @@
 /* ATOM Sovereign UI Framework
    Designed for: Solid 2050 HUD OS
+   Updated: 2026 Premium Map Mode Integration
 */
 
 :root {
@@ -10,6 +11,7 @@
     --window-bg: rgba(15, 15, 15, 0.85);
     --glass-border: rgba(0, 255, 255, 0.3);
     --font-main: 'Roboto Mono', monospace;
+    --neon-glow: 0 0 10px rgba(0, 255, 255, 0.7);
 }
 
 /* --- RESET & GLOBAL --- */
@@ -30,6 +32,35 @@ html, body {
 }
 
 .hidden { display: none !important; }
+
+/* --- PREMIUM MAP LAYER (NEW) --- */
+#full-map-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 0;
+    opacity: 0;
+    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    filter: brightness(0.4) contrast(1.2) grayscale(0.5);
+    pointer-events: none;
+}
+
+#map-engine {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+.map-overlay-gradient {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle, transparent 30%, rgba(0,0,0,0.8) 100%);
+}
 
 /* --- AUTH / LOGIN LAYER --- */
 .auth-overlay {
@@ -75,7 +106,7 @@ html, body {
     color: var(--primary-color);
     letter-spacing: 10px;
     margin: 20px 0;
-    text-shadow: 0 0 10px var(--primary-color);
+    text-shadow: var(--neon-glow);
 }
 
 .pin-keys {
@@ -98,7 +129,7 @@ html, body {
 
 .pin-key:active { background: var(--primary-color); color: black; }
 
-/* --- HUD LAYOUT (BACKGROUND) --- */
+/* --- HUD LAYOUT --- */
 .hud-container {
     position: absolute;
     width: 100%;
@@ -107,23 +138,50 @@ html, body {
     flex-direction: column;
     justify-content: space-between;
     padding: 40px;
-    pointer-events: none; /* Supaya tak kacau window di depan */
-    z-index: 1;
+    pointer-events: none;
+    z-index: 2;
 }
 
-.hud-text { font-weight: bold; text-shadow: 0 0 8px rgba(0,255,255,0.7); }
+.hud-text { font-weight: bold; text-shadow: var(--neon-glow); }
 .hud-text.small { font-size: 1.2em; color: var(--secondary-color); }
 .hud-text.medium { font-size: 3em; color: var(--primary-color); }
-.hud-text.speed-value { font-size: 10em; color: var(--primary-color); line-height: 0.8em; }
+.hud-text.speed-value { 
+    font-size: 10em; 
+    color: var(--primary-color); 
+    line-height: 0.8em; 
+    transition: all 0.8s ease;
+}
 
 .hud-header, .hud-footer {
     display: flex; justify-content: space-between; width: 100%;
+    transition: all 0.5s ease;
 }
 
-.hud-main {
+#main-telemetry {
     flex-grow: 1;
-    display: flex; flex-direction: column;
-    justify-content: center; align-items: center;
+    display: flex; 
+    flex-direction: column;
+    justify-content: center; 
+    align-items: center;
+    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* --- MAP MODE TRANSFORMATION (AUDI STYLE) --- */
+body.map-mode-active #full-map-container {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+body.map-mode-active #main-telemetry {
+    transform: scale(0.55) translateY(200px); /* Speedometer mengecil & ke bawah */
+}
+
+body.map-mode-active .hud-header,
+body.map-mode-active .hud-footer {
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(10px);
+    padding: 10px 20px;
+    border-radius: 10px;
 }
 
 /* --- MULTI-WINDOW SYSTEM --- */
@@ -138,7 +196,7 @@ html, body {
     display: flex;
     flex-direction: column;
     box-shadow: 0 20px 50px rgba(0,0,0,0.8);
-    z-index: 10;
+    z-index: 100;
 }
 
 .window-header {
@@ -158,35 +216,6 @@ html, body {
 }
 
 .window-content { padding: 20px; flex-grow: 1; }
-
-/* --- DIALER INSIDE WINDOW --- */
-.dialer-display {
-    background: #000;
-    color: var(--primary-color);
-    font-size: 2em;
-    padding: 15px;
-    text-align: right;
-    border-radius: 8px;
-    margin-bottom: 15px;
-    border: 1px solid #222;
-}
-
-.dialer-content .keys {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 8px;
-}
-
-.dialer-content .key {
-    background: #222;
-    border: none;
-    color: white;
-    padding: 15px;
-    font-size: 1.2em;
-    border-radius: 8px;
-}
-
-.dialer-content .key.call-button { background: var(--accent-color); color: black; }
 
 /* --- SYSTEM DOCK (iPadOS Style) --- */
 .system-dock {
@@ -208,21 +237,24 @@ html, body {
     background: rgba(255,255,255,0.05);
     border: 1px solid rgba(255,255,255,0.1);
     color: white;
-    width: 55px;
+    padding: 0 15px;
     height: 55px;
     border-radius: 12px;
-    font-size: 1.5em;
+    font-size: 0.8em;
+    font-weight: bold;
     display: flex;
     justify-content: center;
     align-items: center;
     cursor: pointer;
     transition: 0.2s;
+    font-family: var(--font-main);
 }
 
 .dock-item:hover {
     transform: translateY(-10px);
     background: var(--primary-color);
     color: black;
+    box-shadow: var(--neon-glow);
 }
 
 /* --- MIRROR MODE LOGIC --- */
@@ -236,7 +268,7 @@ body.mirror-mode #main-hud {
     .window { min-width: 300px; }
 }
 
-/* Stat Bar Animation */
+/* Stat Bar */
 .stat-bar {
     width: 100%; height: 6px; background: #222; border-radius: 3px; margin: 10px 0;
 }
