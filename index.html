@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Augmented Minimal HUD | Solid 2050</title>
+    
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#000000">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div id="login-screen" class="auth-overlay">
+        <div class="auth-box">
+            <h1 class="hud-text medium">SYSTEM AUTHENTICATION</h1>
+            <p class="hud-text small" style="color: #555;">SOLID 2050 OS CORE</p>
+            
+            <div id="user-selection" class="user-grid">
+                </div>
+
+            <div id="pin-section" class="hidden">
+                <p id="selected-user-name" class="hud-text small" style="color: var(--primary-color);"></p>
+                <div class="pin-display">----</div>
+                <div class="pin-keys">
+                    <button class="pin-key">1</button><button class="pin-key">2</button><button class="pin-key">3</button>
+                    <button class="pin-key">4</button><button class="pin-key">5</button><button class="pin-key">6</button>
+                    <button class="pin-key">7</button><button class="pin-key">8</button><button class="pin-key">9</button>
+                    <button class="pin-key reset">CLR</button><button class="pin-key">0</button><button class="pin-key cancel">ESC</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="main-hud" class="hidden">
+        <div class="hud-container">
+            <div class="hud-header">
+                <span id="system-time" class="hud-text small">00:00</span>
+                <span id="signal-status" class="hud-text small">📶 HUB_CONNECTED</span>
+                <span id="battery-status" class="hud-text small">🔋 100%</span>
+            </div>
+
+            <div class="hud-main">
+                <div class="speed-display">
+                    <span id="current-speed" class="hud-text speed-value">00</span>
+                    <span class="hud-text speed-unit">KM/H</span>
+                </div>
+                <div class="direction-display">
+                    <span id="current-direction" class="hud-text medium">N</span>
+                </div>
+                <div class="algorithm-status">
+                    <p class="hud-text small" style="color: var(--accent-color);">[ SOLID ALGORITHM ACTIVE ]</p>
+                </div>
+            </div>
+
+            <div class="hud-footer">
+                <span id="nav-info" class="hud-text small">DESTINATION: SCANNING...</span>
+            </div>
+        </div>
+
+        <div class="control-panel">
+            <button id="toggle-mirror" class="control-button">🔄 MIRROR HUD</button>
+            <button id="toggle-dialer" class="control-button">📞 SMART DIALER</button>
+            <button onclick="location.reload()" class="control-button" style="background: #440000; color: white;">🔒 LOCK SYSTEM</button>
+        </div>
+    </div>
+
+    <div id="dialer-overlay" class="dialer-overlay hidden">
+        <div class="dialer-keypad">
+            <div class="dialer-display" id="dialer-input"></div>
+            <div class="keys">
+                <button class="key">1</button><button class="key">2</button><button class="key">3</button>
+                <button class="key">4</button><button class="key">5</button><button class="key">6</button>
+                <button class="key">7</button><button class="key">8</button><button class="key">9</button>
+                <button class="key">*</button><button class="key">0</button><button class="key">#</button>
+                <button class="key call-button">CALL</button>
+                <button class="key delete-button">DEL</button>
+                <button class="key close-dialer">EXIT</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="auth.js"></script>
+    <script src="app.js"></script>
+
+</body>
+</html>
