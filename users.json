@@ -1,0 +1,40 @@
+{
+  "system_id": "SOLID-2050-CORE",
+  "version": "1.0.0",
+  "last_update": "2026-02-05",
+  "users": [
+    {
+      "id": "admin_01",
+      "name": "COMMANDER 2050",
+      "pin": "2050",
+      "avatar": "☢️",
+      "access_level": "Level-5",
+      "preferences": {
+        "theme": "cyan-sovereign",
+        "units": "metric"
+      }
+    },
+    {
+      "id": "pilot_01",
+      "name": "GUEST PILOT",
+      "pin": "1234",
+      "avatar": "👤",
+      "access_level": "Level-1",
+      "preferences": {
+        "theme": "minimal",
+        "units": "metric"
+      }
+    },
+    {
+      "id": "pilot_02",
+      "name": "TECH OFFICER",
+      "pin": "8888",
+      "avatar": "🔧",
+      "access_level": "Level-3",
+      "preferences": {
+        "theme": "amber-warning",
+        "units": "metric"
+      }
+    }
+  ]
+}
