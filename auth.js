@@ -1,26 +1,38 @@
 /**
  * AUTH.JS - SOLID 2050 CORE SECURITY
- * Menguruskan Login, PIN, dan Akses User
+ * Menguruskan Login, PIN Dinamik, dan Akses User
  */
 
-// 1. DATA PENGGUNA (Offline JSON Style)
-const users = [
-    { id: 'admin', name: 'COMMANDER 2050', pin: '2050', avatar: '☢️' },
-    { id: 'guest', name: 'GUEST PILOT', pin: '1234', avatar: '👤' }
-];
-
+let users = []; // Akan diisi dari users.json
 let currentUser = null;
 let inputPin = "";
 
 /**
- * INISIALISASI: Menjana senarai user pada skrin
+ * 1. INISIALISASI: Memanggil data dari users.json
  */
-function initAuth() {
+async function initAuth() {
+    try {
+        const response = await fetch('./users.json');
+        if (!response.ok) throw new Error('Network response was not ok');
+        const data = await response.json();
+        users = data.users;
+        console.log("Solid Security: Pilot Data Synchronized.");
+    } catch (error) {
+        console.warn("Security Alert: Using Fail-safe Local Data.", error);
+        // Fallback jika users.json tiada
+        users = [{ id: 'admin', name: 'COMMANDER 2050', pin: '2050', avatar: '☢️' }];
+    }
+    renderUserGrid();
+}
+
+/**
+ * 2. PAPARAN: Menjana grid user pada UI
+ */
+function renderUserGrid() {
     const userGrid = document.getElementById('user-selection');
     if (!userGrid) return;
 
-    userGrid.innerHTML = ""; // Reset grid
-
+    userGrid.innerHTML = ""; 
     users.forEach(user => {
         const div = document.createElement('div');
         div.className = 'user-card';
@@ -31,16 +43,14 @@ function initAuth() {
         div.onclick = () => selectUser(user);
         userGrid.appendChild(div);
     });
-    
-    console.log("Security System: Waiting for Pilot Selection...");
 }
 
 /**
- * PROSES: Pilih User & Papar PIN Pad
+ * 3. PROSES: Pilih User & Sedia Input PIN
  */
 function selectUser(user) {
     currentUser = user;
-    inputPin = ""; // Reset sebarang pin lama
+    inputPin = ""; 
     updatePinDisplay();
     
     document.getElementById('user-selection').classList.add('hidden');
@@ -49,13 +59,13 @@ function selectUser(user) {
 }
 
 /**
- * LOGIK: Input PIN daripada Butang
+ * 4. LOGIK: Input PIN & Feedback Visual
  */
 document.querySelectorAll('.pin-key').forEach(btn => {
     btn.addEventListener('click', () => {
         const val = btn.innerText;
         
-        // Kesan Visual Butang Ditekan
+        // Haptic Feedback Visual
         btn.style.background = "var(--primary-color)";
         btn.style.color = "black";
         setTimeout(() => {
@@ -64,24 +74,19 @@ document.querySelectorAll('.pin-key').forEach(btn => {
         }, 100);
 
         if (!isNaN(val)) {
-            // Jika Nombor
             if (inputPin.length < 4) {
                 inputPin += val;
                 updatePinDisplay();
             }
-            
-            // Auto-Verify jika sudah 4 digit
             if (inputPin.length === 4) {
                 setTimeout(verifyPin, 300);
             }
         } 
         else if (btn.classList.contains('reset')) {
-            // Jika CLR (Clear)
             inputPin = "";
             updatePinDisplay();
         } 
         else if (btn.classList.contains('cancel')) {
-            // Jika ESC (Back)
             inputPin = "";
             document.getElementById('pin-section').classList.add('hidden');
             document.getElementById('user-selection').classList.remove('hidden');
@@ -90,7 +95,7 @@ document.querySelectorAll('.pin-key').forEach(btn => {
 });
 
 /**
- * UI: Kemaskini paparan bintang (*) PIN
+ * 5. UI: Kemaskini paparan PIN (*)
  */
 function updatePinDisplay() {
     const display = document.querySelector('.pin-display');
@@ -102,33 +107,30 @@ function updatePinDisplay() {
 }
 
 /**
- * SECURITY: Pengesahan PIN & Buka HUD
+ * 6. SECURITY: Pengesahan & Akses HUD
  */
 function verifyPin() {
     if (inputPin === currentUser.pin) {
-        console.log(`Access Granted: ${currentUser.name} Authenticated.`);
+        console.log(`Access Granted: ${currentUser.name} Online.`);
         
         const loginScreen = document.getElementById('login-screen');
-        loginScreen.style.opacity = "0"; // Animasi Fade Out
+        loginScreen.style.opacity = "0"; 
         
         setTimeout(() => {
             loginScreen.classList.add('hidden');
             document.getElementById('main-hud').classList.remove('hidden');
             
-            // PENTING: Memanggil fungsi Start di app.js
+            // Panggil Enjin Utama di app.js
             if (typeof startHUD === "function") {
                 startHUD(); 
-            } else {
-                console.warn("System Warning: startHUD function not found in app.js");
             }
         }, 500);
     } else {
-        // Jika Salah PIN
         alert("ACCESS DENIED: PIN INCORRECT");
         inputPin = "";
         updatePinDisplay();
     }
 }
 
-// Jalankan sistem auth sebaik sahaja tetingkap dimuatkan
+// Jalankan sistem sebaik sahaja fail dimuatkan
 window.addEventListener('DOMContentLoaded', initAuth);
