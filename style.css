@@ -1,6 +1,6 @@
 /* ATOM Sovereign UI Framework
    Designed for: Solid 2050 HUD OS
-   Updated: 2026 Premium Map Mode Integration
+   Updated: 2026 Premium Map Mode Integration (Audi/Aston Style)
 */
 
 :root {
@@ -11,7 +11,7 @@
     --window-bg: rgba(15, 15, 15, 0.85);
     --glass-border: rgba(0, 255, 255, 0.3);
     --font-main: 'Roboto Mono', monospace;
-    --neon-glow: 0 0 10px rgba(0, 255, 255, 0.7);
+    --neon-glow: 0 0 15px rgba(0, 255, 255, 0.7);
 }
 
 /* --- RESET & GLOBAL --- */
@@ -28,12 +28,12 @@ html, body {
     background-color: var(--bg-color);
     color: white;
     font-family: var(--font-main);
-    overflow: hidden; /* Lock screen for Kiosk mode */
+    overflow: hidden;
 }
 
 .hidden { display: none !important; }
 
-/* --- PREMIUM MAP LAYER (NEW) --- */
+/* --- PREMIUM MAP LAYER (FIXED FOR VISIBILITY) --- */
 #full-map-container {
     position: fixed;
     top: 0;
@@ -41,9 +41,9 @@ html, body {
     width: 100vw;
     height: 100vh;
     z-index: 0;
-    opacity: 0;
-    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-    filter: brightness(0.4) contrast(1.2) grayscale(0.5);
+    opacity: 0; /* Tersembunyi pada permulaan */
+    transition: all 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+    background: #050505;
     pointer-events: none;
 }
 
@@ -51,6 +51,8 @@ html, body {
     width: 100%;
     height: 100%;
     border: none;
+    /* Filter untuk tukar peta cerah kepada Mod Malam Futuristik */
+    filter: invert(90%) hue-rotate(180deg) brightness(0.6) contrast(1.2) grayscale(0.3);
 }
 
 .map-overlay-gradient {
@@ -59,77 +61,11 @@ html, body {
     left: 0;
     width: 100%;
     height: 100%;
-    background: radial-gradient(circle, transparent 30%, rgba(0,0,0,0.8) 100%);
+    /* Gradient untuk fokuskan cahaya pada tengah skrin */
+    background: radial-gradient(circle, transparent 20%, rgba(0,0,0,0.9) 100%);
 }
 
-/* --- AUTH / LOGIN LAYER --- */
-.auth-overlay {
-    position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background: radial-gradient(circle, #111 0%, #000 100%);
-    z-index: 10000;
-    display: flex; justify-content: center; align-items: center;
-    transition: opacity 0.5s ease;
-}
-
-.auth-box {
-    text-align: center;
-    width: 90%;
-    max-width: 600px;
-}
-
-.user-grid {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    margin-top: 30px;
-}
-
-.user-card {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid var(--glass-border);
-    padding: 20px;
-    border-radius: 15px;
-    cursor: pointer;
-    transition: 0.3s;
-    width: 160px;
-}
-
-.user-card:hover {
-    background: rgba(0, 255, 255, 0.1);
-    box-shadow: 0 0 20px var(--primary-color);
-    transform: translateY(-5px);
-}
-
-.pin-display {
-    font-size: 3.5em;
-    color: var(--primary-color);
-    letter-spacing: 10px;
-    margin: 20px 0;
-    text-shadow: var(--neon-glow);
-}
-
-.pin-keys {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
-    max-width: 300px;
-    margin: 0 auto;
-}
-
-.pin-key {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid var(--glass-border);
-    color: white;
-    padding: 20px;
-    font-size: 1.5em;
-    border-radius: 10px;
-    cursor: pointer;
-}
-
-.pin-key:active { background: var(--primary-color); color: black; }
-
-/* --- HUD LAYOUT --- */
+/* --- HUD LAYOUT & TELEMETRY --- */
 .hud-container {
     position: absolute;
     width: 100%;
@@ -137,24 +73,9 @@ html, body {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    padding: 40px;
+    padding: 30px;
     pointer-events: none;
     z-index: 2;
-}
-
-.hud-text { font-weight: bold; text-shadow: var(--neon-glow); }
-.hud-text.small { font-size: 1.2em; color: var(--secondary-color); }
-.hud-text.medium { font-size: 3em; color: var(--primary-color); }
-.hud-text.speed-value { 
-    font-size: 10em; 
-    color: var(--primary-color); 
-    line-height: 0.8em; 
-    transition: all 0.8s ease;
-}
-
-.hud-header, .hud-footer {
-    display: flex; justify-content: space-between; width: 100%;
-    transition: all 0.5s ease;
 }
 
 #main-telemetry {
@@ -163,116 +84,100 @@ html, body {
     flex-direction: column;
     justify-content: center; 
     align-items: center;
-    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 1s cubic-bezier(0.16, 1, 0.3, 1); /* Animasi licin */
+    text-shadow: var(--neon-glow);
 }
 
-/* --- MAP MODE TRANSFORMATION (AUDI STYLE) --- */
+.hud-text.speed-value { 
+    font-size: 10em; 
+    color: var(--primary-color); 
+    line-height: 0.8em; 
+    font-weight: 700;
+}
+
+.speed-unit { font-size: 1.5em; color: var(--secondary-color); }
+
+/* --- TRANSFORASI MAP MODE (THE AUDI MOVE) --- */
 body.map-mode-active #full-map-container {
     opacity: 1;
     pointer-events: auto;
 }
 
 body.map-mode-active #main-telemetry {
-    transform: scale(0.55) translateY(200px); /* Speedometer mengecil & ke bawah */
+    /* Speedometer mengecil & berganjak ke bawah (Macam Aston Martin) */
+    transform: translateY(28vh) scale(0.5); 
+    opacity: 0.9;
 }
 
 body.map-mode-active .hud-header,
 body.map-mode-active .hud-footer {
-    background: rgba(0, 0, 0, 0.6);
-    backdrop-filter: blur(10px);
-    padding: 10px 20px;
-    border-radius: 10px;
-}
-
-/* --- MULTI-WINDOW SYSTEM --- */
-.window {
-    position: absolute;
-    min-width: 350px;
-    background: var(--window-bg);
-    border: 1px solid var(--glass-border);
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(15px);
+    padding: 15px 30px;
     border-radius: 15px;
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    display: flex;
-    flex-direction: column;
-    box-shadow: 0 20px 50px rgba(0,0,0,0.8);
-    z-index: 100;
+    border: 1px solid var(--glass-border);
 }
 
-.window-header {
-    padding: 12px 18px;
-    background: rgba(255, 255, 255, 0.05);
-    border-bottom: 1px solid var(--glass-border);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    cursor: move;
-}
-
-.window-title { font-size: 0.75em; color: var(--primary-color); letter-spacing: 2px; }
-
-.window-controls button {
-    background: none; border: none; color: #ff4444; font-size: 1.2em; cursor: pointer;
-}
-
-.window-content { padding: 20px; flex-grow: 1; }
-
-/* --- SYSTEM DOCK (iPadOS Style) --- */
+/* --- SYSTEM DOCK --- */
 .system-dock {
     position: absolute;
-    bottom: 20px;
+    bottom: 25px;
     left: 50%;
     transform: translateX(-50%);
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(15px);
-    padding: 10px 20px;
+    background: rgba(20, 20, 20, 0.8);
+    backdrop-filter: blur(20px);
+    padding: 8px 15px;
     border-radius: 20px;
     display: flex;
-    gap: 15px;
+    gap: 12px;
     border: 1px solid var(--glass-border);
     z-index: 1000;
+    pointer-events: auto;
+    transition: 0.3s;
 }
 
 .dock-item {
     background: rgba(255,255,255,0.05);
     border: 1px solid rgba(255,255,255,0.1);
     color: white;
-    padding: 0 15px;
-    height: 55px;
+    padding: 10px 18px;
+    height: 50px;
     border-radius: 12px;
-    font-size: 0.8em;
+    font-size: 0.85em;
     font-weight: bold;
-    display: flex;
-    justify-content: center;
-    align-items: center;
     cursor: pointer;
-    transition: 0.2s;
-    font-family: var(--font-main);
+    transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .dock-item:hover {
-    transform: translateY(-10px);
+    transform: translateY(-8px) scale(1.1);
     background: var(--primary-color);
     color: black;
     box-shadow: var(--neon-glow);
 }
 
-/* --- MIRROR MODE LOGIC --- */
+/* --- WINDOW SYSTEM --- */
+.window {
+    position: absolute;
+    min-width: 320px;
+    background: var(--window-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    backdrop-filter: blur(25px);
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.6);
+    z-index: 100;
+    pointer-events: auto;
+}
+
+/* --- MIRROR MODE --- */
 body.mirror-mode #main-hud {
     transform: scaleX(-1);
 }
 
-/* --- RESPONSIVE TABLET --- */
+/* --- RESPONSIVE --- */
 @media (max-width: 1024px) {
     .hud-text.speed-value { font-size: 7em; }
-    .window { min-width: 300px; }
-}
-
-/* Stat Bar */
-.stat-bar {
-    width: 100%; height: 6px; background: #222; border-radius: 3px; margin: 10px 0;
-}
-.stat-fill {
-    height: 100%; background: var(--accent-color); border-radius: 3px;
-    box-shadow: 0 0 10px var(--accent-color);
+    .hud-container { padding: 20px; }
 }
