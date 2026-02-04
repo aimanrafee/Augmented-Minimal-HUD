@@ -21,8 +21,7 @@
             <h1 class="hud-text medium">SYSTEM AUTHENTICATION</h1>
             <p class="hud-text small" style="color: #555; margin-bottom: 30px;">SOLID 2050 OS CORE</p>
             
-            <div id="user-selection" class="user-grid">
-                </div>
+            <div id="user-selection" class="user-grid"></div>
 
             <div id="pin-section" class="hidden">
                 <p id="selected-user-name" class="hud-text small" style="color: var(--primary-color);"></p>
@@ -100,19 +99,25 @@
             <button class="dock-item" onclick="location.reload()" style="color: #ff4444;">🔒 LOCK</button>
         </div>
 
-    </div> <script src="auth.js"></script>
+    </div> 
+
+    <script src="auth.js"></script>
     <script src="app.js"></script>
     <script>
-        // Fungsi Pantas untuk Multi-Window
+        /**
+         * FUNGSI PANTAS WINDOW MANAGEMENT
+         * Menguruskan paparan tetingkap bertumpuk (Stacked Windows)
+         */
         function toggleWindow(id) {
             const win = document.getElementById(id);
             win.classList.toggle('hidden');
             if (!win.classList.contains('hidden')) {
-                // Bawa ke depan
+                // Bawa tetingkap yang dibuka ke lapisan paling depan
                 document.querySelectorAll('.window').forEach(w => w.style.zIndex = "10");
                 win.style.zIndex = "100";
             }
         }
+
         function closeWindow(id) {
             document.getElementById(id).classList.add('hidden');
         }
