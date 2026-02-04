@@ -1,0 +1,246 @@
+/* ATOM Sovereign UI Framework
+   Designed for: Solid 2050 HUD OS
+*/
+
+:root {
+    --bg-color: #000000;
+    --primary-color: #00FFFF; /* Cyan */
+    --secondary-color: #888888;
+    --accent-color: #00FF00; /* Neon Green */
+    --window-bg: rgba(15, 15, 15, 0.85);
+    --glass-border: rgba(0, 255, 255, 0.3);
+    --font-main: 'Roboto Mono', monospace;
+}
+
+/* --- RESET & GLOBAL --- */
+* {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--bg-color);
+    color: white;
+    font-family: var(--font-main);
+    overflow: hidden; /* Lock screen for Kiosk mode */
+}
+
+.hidden { display: none !important; }
+
+/* --- AUTH / LOGIN LAYER --- */
+.auth-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: radial-gradient(circle, #111 0%, #000 100%);
+    z-index: 10000;
+    display: flex; justify-content: center; align-items: center;
+    transition: opacity 0.5s ease;
+}
+
+.auth-box {
+    text-align: center;
+    width: 90%;
+    max-width: 600px;
+}
+
+.user-grid {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 30px;
+}
+
+.user-card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--glass-border);
+    padding: 20px;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: 0.3s;
+    width: 160px;
+}
+
+.user-card:hover {
+    background: rgba(0, 255, 255, 0.1);
+    box-shadow: 0 0 20px var(--primary-color);
+    transform: translateY(-5px);
+}
+
+.pin-display {
+    font-size: 3.5em;
+    color: var(--primary-color);
+    letter-spacing: 10px;
+    margin: 20px 0;
+    text-shadow: 0 0 10px var(--primary-color);
+}
+
+.pin-keys {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    max-width: 300px;
+    margin: 0 auto;
+}
+
+.pin-key {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--glass-border);
+    color: white;
+    padding: 20px;
+    font-size: 1.5em;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.pin-key:active { background: var(--primary-color); color: black; }
+
+/* --- HUD LAYOUT (BACKGROUND) --- */
+.hud-container {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 40px;
+    pointer-events: none; /* Supaya tak kacau window di depan */
+    z-index: 1;
+}
+
+.hud-text { font-weight: bold; text-shadow: 0 0 8px rgba(0,255,255,0.7); }
+.hud-text.small { font-size: 1.2em; color: var(--secondary-color); }
+.hud-text.medium { font-size: 3em; color: var(--primary-color); }
+.hud-text.speed-value { font-size: 10em; color: var(--primary-color); line-height: 0.8em; }
+
+.hud-header, .hud-footer {
+    display: flex; justify-content: space-between; width: 100%;
+}
+
+.hud-main {
+    flex-grow: 1;
+    display: flex; flex-direction: column;
+    justify-content: center; align-items: center;
+}
+
+/* --- MULTI-WINDOW SYSTEM --- */
+.window {
+    position: absolute;
+    min-width: 350px;
+    background: var(--window-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 15px;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+    z-index: 10;
+}
+
+.window-header {
+    padding: 12px 18px;
+    background: rgba(255, 255, 255, 0.05);
+    border-bottom: 1px solid var(--glass-border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: move;
+}
+
+.window-title { font-size: 0.75em; color: var(--primary-color); letter-spacing: 2px; }
+
+.window-controls button {
+    background: none; border: none; color: #ff4444; font-size: 1.2em; cursor: pointer;
+}
+
+.window-content { padding: 20px; flex-grow: 1; }
+
+/* --- DIALER INSIDE WINDOW --- */
+.dialer-display {
+    background: #000;
+    color: var(--primary-color);
+    font-size: 2em;
+    padding: 15px;
+    text-align: right;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    border: 1px solid #222;
+}
+
+.dialer-content .keys {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+}
+
+.dialer-content .key {
+    background: #222;
+    border: none;
+    color: white;
+    padding: 15px;
+    font-size: 1.2em;
+    border-radius: 8px;
+}
+
+.dialer-content .key.call-button { background: var(--accent-color); color: black; }
+
+/* --- SYSTEM DOCK (iPadOS Style) --- */
+.system-dock {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(15px);
+    padding: 10px 20px;
+    border-radius: 20px;
+    display: flex;
+    gap: 15px;
+    border: 1px solid var(--glass-border);
+    z-index: 1000;
+}
+
+.dock-item {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    color: white;
+    width: 55px;
+    height: 55px;
+    border-radius: 12px;
+    font-size: 1.5em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.dock-item:hover {
+    transform: translateY(-10px);
+    background: var(--primary-color);
+    color: black;
+}
+
+/* --- MIRROR MODE LOGIC --- */
+body.mirror-mode #main-hud {
+    transform: scaleX(-1);
+}
+
+/* --- RESPONSIVE TABLET --- */
+@media (max-width: 1024px) {
+    .hud-text.speed-value { font-size: 7em; }
+    .window { min-width: 300px; }
+}
+
+/* Stat Bar Animation */
+.stat-bar {
+    width: 100%; height: 6px; background: #222; border-radius: 3px; margin: 10px 0;
+}
+.stat-fill {
+    height: 100%; background: var(--accent-color); border-radius: 3px;
+    box-shadow: 0 0 10px var(--accent-color);
+}
