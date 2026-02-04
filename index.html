@@ -38,6 +38,16 @@
 
     <div id="main-hud" class="hidden">
         
+        <div id="full-map-container" class="map-hidden">
+            <iframe 
+                id="map-engine"
+                src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d15935.123456789!2d101.6868!3d3.1390!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sen!2smy!4v1234567890" 
+                allowfullscreen="" 
+                loading="lazy">
+            </iframe>
+            <div class="map-overlay-gradient"></div>
+        </div>
+
         <div class="hud-container">
             <div class="hud-header">
                 <span id="system-time" class="hud-text small">00:00</span>
@@ -45,7 +55,7 @@
                 <span id="battery-status" class="hud-text small">🔋 100%</span>
             </div>
 
-            <div class="hud-main">
+            <div id="main-telemetry" class="hud-main">
                 <div class="speed-display">
                     <span id="current-speed" class="hud-text speed-value">00</span>
                     <span class="hud-text speed-unit">KM/H</span>
@@ -93,6 +103,7 @@
         </div>
 
         <div class="system-dock">
+            <button class="dock-item" onclick="toggleMapMode()">🗺️ MAPS</button>
             <button class="dock-item" onclick="toggleWindow('window-dialer')">📞</button>
             <button class="dock-item" onclick="toggleWindow('window-stats')">📊</button>
             <button class="dock-item" id="toggle-mirror">🔄 MIRROR</button>
@@ -105,14 +116,12 @@
     <script src="app.js"></script>
     <script>
         /**
-         * FUNGSI PANTAS WINDOW MANAGEMENT
-         * Menguruskan paparan tetingkap bertumpuk (Stacked Windows)
+         * FUNGSI PANTAS WINDOW & MAP MANAGEMENT
          */
         function toggleWindow(id) {
             const win = document.getElementById(id);
             win.classList.toggle('hidden');
             if (!win.classList.contains('hidden')) {
-                // Bawa tetingkap yang dibuka ke lapisan paling depan
                 document.querySelectorAll('.window').forEach(w => w.style.zIndex = "10");
                 win.style.zIndex = "100";
             }
@@ -120,6 +129,19 @@
 
         function closeWindow(id) {
             document.getElementById(id).classList.add('hidden');
+        }
+
+        function toggleMapMode() {
+            document.body.classList.toggle('map-mode-active');
+            const mapBtn = document.querySelector('button[onclick="toggleMapMode()"]');
+            
+            if (document.body.classList.contains('map-mode-active')) {
+                mapBtn.style.color = "var(--primary-color)";
+                mapBtn.innerHTML = "🗺️ HUD";
+            } else {
+                mapBtn.style.color = "white";
+                mapBtn.innerHTML = "🗺️ MAPS";
+            }
         }
     </script>
 </body>
