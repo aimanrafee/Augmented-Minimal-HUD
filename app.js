@@ -1,6 +1,6 @@
 /**
  * APP.JS - THE ENGINE (SOLID 2050 CORE)
- * Menguruskan Offline Registration, Navigasi, Windows, dan Sensor Data
+ * Menguruskan Offline Registration, Navigasi, Windows, Sensor Data, & Map Mode
  */
 
 // ==========================================
@@ -24,9 +24,10 @@ if ('serviceWorker' in navigator) {
 function startHUD() {
     console.log("HUD Core Online. Initializing Systems...");
     
-    // Jalankan Jam
+    // Jalankan Sistem Info (Masa & Bateri)
     updateClock();
     setInterval(updateClock, 1000);
+    initBatteryStatus();
 
     // Jalankan GPS Speedometer
     initSpeedometer();
@@ -36,11 +37,14 @@ function startHUD() {
 
     // Aktifkan Logik Smart Dialer
     initDialerLogic();
+
+    // Aktifkan Logik Mirror & Map Mode
+    initModeControllers();
     
     console.log("All Systems Nominal.");
 }
 
-// --- LOGIK JAM & SISTEM INFO ---
+// --- LOGIK JAM & BATERI ---
 function updateClock() {
     const now = new Date();
     const timeStr = now.toLocaleTimeString('ms-MY', { 
@@ -51,6 +55,19 @@ function updateClock() {
     });
     const timeDisplay = document.getElementById('system-time');
     if (timeDisplay) timeDisplay.innerText = timeStr;
+}
+
+function initBatteryStatus() {
+    if ('getBattery' in navigator) {
+        navigator.getBattery().then(battery => {
+            const updateBatt = () => {
+                const battEl = document.getElementById('battery-status');
+                if (battEl) battEl.innerText = `🔋 ${Math.round(battery.level * 100)}%`;
+            };
+            updateBatt();
+            battery.addEventListener('levelchange', updateBatt);
+        });
+    }
 }
 
 // --- LOGIK SPEEDOMETER (GPS SENSOR) ---
@@ -73,6 +90,11 @@ function initSpeedometer() {
                 const dirEl = document.getElementById('current-direction');
                 if (dirEl) dirEl.innerText = directions[index];
             }
+
+            // Kemaskini Info Navigasi
+            const navInfo = document.getElementById('nav-info');
+            if (navInfo) navInfo.innerText = `ALGORITHM: ACTIVE [LAT: ${position.coords.latitude.toFixed(2)}]`;
+            
         }, (error) => {
             console.warn("GPS Access Denied:", error.message);
         }, {
@@ -98,7 +120,7 @@ function makeDraggable(elmnt) {
 
     if (header) {
         header.onmousedown = dragMouseDown;
-        header.ontouchstart = dragMouseDown; // Support Tablet/Touch
+        header.ontouchstart = dragMouseDown; 
     }
 
     function dragMouseDown(e) {
@@ -161,13 +183,37 @@ function initDialerLogic() {
     });
 }
 
-// --- LOGIK MIRROR MODE ---
-const mirrorBtn = document.getElementById('toggle-mirror');
-if (mirrorBtn) {
-    mirrorBtn.addEventListener('click', () => {
-        document.body.classList.toggle('mirror-mode');
-        // Visual feedback pada butang dock
-        mirrorBtn.style.background = document.body.classList.contains('mirror-mode') ? "var(--primary-color)" : "";
-        mirrorBtn.style.color = document.body.classList.contains('mirror-mode') ? "black" : "white";
-    });
+// --- LOGIK MODE CONTROLLERS (MIRROR & MAPS) ---
+function initModeControllers() {
+    // 1. Mirror Mode
+    const mirrorBtn = document.getElementById('toggle-mirror');
+    if (mirrorBtn) {
+        mirrorBtn.addEventListener('click', () => {
+            document.body.classList.toggle('mirror-mode');
+            mirrorBtn.style.background = document.body.classList.contains('mirror-mode') ? "var(--primary-color)" : "";
+            mirrorBtn.style.color = document.body.classList.contains('mirror-mode') ? "black" : "white";
+        });
+    }
+
+    // 2. Map Mode (Trigger CSS Transformation)
+    // Fungsi ini dipanggil dari index.html: toggleMapMode()
+}
+
+/**
+ * FUNGSI GLOBAL UNTUK TOGGLE MAPS
+ * Dipanggil terus dari butang dock
+ */
+function toggleMapMode() {
+    document.body.classList.toggle('map-mode-active');
+    const mapBtn = document.querySelector('button[onclick="toggleMapMode()"]');
+    
+    if (document.body.classList.contains('map-mode-active')) {
+        mapBtn.style.background = "var(--primary-color)";
+        mapBtn.style.color = "black";
+        mapBtn.innerHTML = "🗺️ HUD";
+    } else {
+        mapBtn.style.background = "";
+        mapBtn.style.color = "white";
+        mapBtn.innerHTML = "🗺️ MAPS";
+    }
 }
