@@ -1,29 +1,46 @@
 /**
  * APP.JS - THE ENGINE (SOLID 2050 CORE)
- * Menguruskan Navigasi, Windows, dan Sensor Data
+ * Menguruskan Offline Registration, Navigasi, Windows, dan Sensor Data
  */
 
-// Fungsi Utama: Hanya berjalan selepas Login Berjaya
+// ==========================================
+// 1. PENDAFTARAN SERVICE WORKER (OFFLINE ENGINE)
+// ==========================================
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./service-worker.js')
+            .then((registration) => {
+                console.log('Solid Offline Engine: Online (Scope: ' + registration.scope + ')');
+            })
+            .catch((error) => {
+                console.log('Solid Offline Engine: Failed to register: ', error);
+            });
+    });
+}
+
+// ==========================================
+// 2. HUD CORE ENGINE (Jalan selepas Login)
+// ==========================================
 function startHUD() {
     console.log("HUD Core Online. Initializing Systems...");
     
-    // 1. Jalankan Jam
+    // Jalankan Jam
     updateClock();
     setInterval(updateClock, 1000);
 
-    // 2. Jalankan GPS Speedometer
+    // Jalankan GPS Speedometer
     initSpeedometer();
 
-    // 3. Aktifkan Sistem Draggable untuk Multi-Window
+    // Aktifkan Sistem Draggable untuk Multi-Window
     initDraggableWindows();
 
-    // 4. Aktifkan Logik Smart Dialer
+    // Aktifkan Logik Smart Dialer
     initDialerLogic();
     
     console.log("All Systems Nominal.");
 }
 
-// --- 1. LOGIK JAM & SISTEM INFO ---
+// --- LOGIK JAM & SISTEM INFO ---
 function updateClock() {
     const now = new Date();
     const timeStr = now.toLocaleTimeString('ms-MY', { 
@@ -36,11 +53,11 @@ function updateClock() {
     if (timeDisplay) timeDisplay.innerText = timeStr;
 }
 
-// --- 2. LOGIK SPEEDOMETER (GPS SENSOR) ---
+// --- LOGIK SPEEDOMETER (GPS SENSOR) ---
 function initSpeedometer() {
     if ("geolocation" in navigator) {
         navigator.geolocation.watchPosition((position) => {
-            // Tukar m/s ke KM/H
+            // Tukar m/s ke KM/H (Meter per second * 3.6)
             let speed = position.coords.speed; 
             if (speed === null || speed < 0) speed = 0;
             let kmh = Math.round(speed * 3.6);
@@ -57,18 +74,16 @@ function initSpeedometer() {
                 if (dirEl) dirEl.innerText = directions[index];
             }
         }, (error) => {
-            console.warn("GPS Access Denied or Unavailable:", error.message);
+            console.warn("GPS Access Denied:", error.message);
         }, {
             enableHighAccuracy: true,
             maximumAge: 0,
             timeout: 5000
         });
-    } else {
-        console.error("Geolocation is not supported by this device.");
     }
 }
 
-// --- 3. LOGIK MULTI-WINDOW (DRAGGABLE) ---
+// --- LOGIK MULTI-WINDOW (DRAGGABLE SYSTEM) ---
 function initDraggableWindows() {
     const windows = ['window-dialer', 'window-stats'];
     windows.forEach(id => {
@@ -83,14 +98,12 @@ function makeDraggable(elmnt) {
 
     if (header) {
         header.onmousedown = dragMouseDown;
-        header.ontouchstart = dragMouseDown; // Support Tablet
+        header.ontouchstart = dragMouseDown; // Support Tablet/Touch
     }
 
     function dragMouseDown(e) {
         e = e || window.event;
-        // e.preventDefault(); // Dibuang untuk benarkan klik pada butang dalam header
-        
-        // Dapatkan posisi mouse/touch
+        // Dapatkan posisi mouse/touch awal
         pos3 = (e.clientX || (e.touches ? e.touches[0].clientX : 0));
         pos4 = (e.clientY || (e.touches ? e.touches[0].clientY : 0));
         
@@ -99,7 +112,7 @@ function makeDraggable(elmnt) {
         document.onmousemove = elementDrag;
         document.ontouchmove = elementDrag;
 
-        // Bawa tetingkap yang sedang diheret ke depan
+        // Bawa tetingkap ke depan (Z-Index)
         document.querySelectorAll('.window').forEach(w => w.style.zIndex = "10");
         elmnt.style.zIndex = "100";
     }
@@ -114,7 +127,7 @@ function makeDraggable(elmnt) {
         pos3 = clientX;
         pos4 = clientY;
         
-        // Tetapkan posisi baru
+        // Update Posisi CSS
         elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
         elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
     }
@@ -127,7 +140,7 @@ function makeDraggable(elmnt) {
     }
 }
 
-// --- 4. LOGIK SMART DIALER ---
+// --- LOGIK SMART DIALER ---
 function initDialerLogic() {
     const dialerInput = document.getElementById('dialer-input');
     const keys = document.querySelectorAll('.dialer-content .key');
@@ -148,12 +161,13 @@ function initDialerLogic() {
     });
 }
 
-// --- 5. LOGIK MIRROR MODE ---
+// --- LOGIK MIRROR MODE ---
 const mirrorBtn = document.getElementById('toggle-mirror');
 if (mirrorBtn) {
     mirrorBtn.addEventListener('click', () => {
         document.body.classList.toggle('mirror-mode');
-        // Visual feedback pada butang
-        mirrorBtn.style.color = document.body.classList.contains('mirror-mode') ? "var(--accent-color)" : "white";
+        // Visual feedback pada butang dock
+        mirrorBtn.style.background = document.body.classList.contains('mirror-mode') ? "var(--primary-color)" : "";
+        mirrorBtn.style.color = document.body.classList.contains('mirror-mode') ? "black" : "white";
     });
 }
