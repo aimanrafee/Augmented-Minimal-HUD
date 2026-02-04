@@ -2,70 +2,61 @@
 
 ![License](https://img.shields.io/badge/OS-Solid--2050-cyan)
 ![Platform](https://img.shields.io/badge/Platform-PWA--Mobile--Tablet-black)
-![Offline](https://img.shields.io/badge/Offline-Smartest--Algorithm-green)
+![Status](https://img.shields.io/badge/Status-Beta--Sovereign-green)
 
-**Augmented Minimal HUD** adalah sebuah sistem operasi paparan (HUD OS) berasaskan HTML/JS yang dioptimumkan untuk kegunaan automotif masa depan. Dibangunkan dengan visi **Solid 2050**, sistem ini mengutamakan privasi penuh melalui pemprosesan **Offline Smartest Algorithm**.
+**Augmented Minimal HUD** adalah satu sistem operasi paparan (HUD OS) berasaskan HTML/JS yang dioptimumkan untuk automotif masa depan. Dibangunkan di bawah visi **Solid 2050**, sistem ini mengutamakan kawalan mutlak pengguna melalui pemprosesan **Offline Smartest Algorithm**.
 
 ---
 
 ## 🚀 Ciri-Ciri Utama (Core Features)
 
-* **Kiosk Mode Authentication**: Sistem "Lockdown" dengan akaun pengguna dan pengesahan PIN 4-digit yang dinamik.
-* **iPadOS Style Multi-Window**: Antaramuka tetingkap yang boleh digerakkan (*draggable*) dan ditindan (*stackable*) untuk multi-tasking yang lancar.
-* **Offline-First (PWA)**: Berjalan 100% tanpa internet menggunakan Service Workers. Sesuai untuk kawasan pedalaman atau bawah tanah.
-* **Real-time Telemetry**: Data kelajuan (GPS) dan arah kompas yang tepat terus ke paparan HUD.
-* **Mirror Mode**: Sokongan pantulan horizontal untuk penggunaan cermin depan (Windshield) kereta.
-* **Smart Dialer**: Sistem panggilan bersepadu yang boleh diakses melalui dock sistem.
+* **Sovereign Authentication**: Sistem "Lockdown" dengan grid pemilihan pilot dan pengesahan PIN 4-digit yang dinamik melalui `users.json`.
+* **iPadOS Style Multi-Window**: Antaramuka tetingkap yang boleh digerakkan (*draggable*), ditindan (*stackable*), dan ditutup secara bebas untuk multi-tasking premium.
+* **Offline-First Architecture**: Berjalan 100% tanpa internet menggunakan Service Workers (PWA), memastikan HUD sentiasa sedia walaupun di kawasan terpencil.
+* **Real-time Telemetry**: Data kelajuan (GPS KM/H) dan arah kompas (N/S/E/W) yang tepat terus ke paparan utama.
+* **Mirror Mode**: Sokongan pantulan horizontal (HUD Flip) untuk penggunaan cermin depan (Windshield) kereta.
+* **Premium Glassmorphism**: UI yang menggunakan kesan kabur (*backdrop-filter*) dan neon glow untuk estetik Audi & Aston Martin.
 
 ---
 
-## 🛠️ Infrastruktur Teknologi
+## 🛠️ Arkitektur Sistem
 
-Sistem ini dibina menggunakan **ATOM Sovereign Framework**:
-
-* **Frontend**: HTML5, CSS3 (Glassmorphism & Neon UI)
-* **Logic Engine**: Vanilla JavaScript (ES6+)
-* **Data Management**: Dynamic JSON (Internal Fetch)
-* **App Protocol**: Progressive Web App (PWA) dengan manifest.json
-
----
-
-## 📁 Struktur Fail
+Sistem ini dibina dengan struktur modular yang sangat bersih:
 
 | Fail | Fungsi |
 | :--- | :--- |
-| `index.html` | Struktur UI, Multi-Window, dan System Dock |
-| `style.css` | Tema ATOM Sovereign, kesan kaca, dan animasi HUD |
-| `auth.js` | Gatekeeper sistem, logik PIN, dan integrasi user |
-| `app.js` | Enjin Speedometer, GPS, dan pendaftaran Service Worker |
-| `users.json` | Pangkalan data pilot dan kod akses (PIN) |
-| `manifest.json` | Konfigurasi Fullscreen Kiosk Mode & Ikon App |
-| `service-worker.js` | Pengurus Cache untuk kestabilan 100% Offline |
+| `index.html` | Struktur teras, tetingkap dialer, monitor stats, dan system dock. |
+| `style.css` | Tema ATOM Sovereign, kesan kaca (blur), dan animasi neon. |
+| `auth.js` | Logik pengesahan pilot, integrasi JSON, dan kawalan akses. |
+| `app.js` | Enjin Speedometer, pengurusan tetingkap draggable, dan PWA registration. |
+| `users.json` | Pangkalan data pilot (PIN, Avatar, Nama) yang boleh dikemaskini. |
+| `manifest.json` | Konfigurasi Fullscreen Kiosk Mode untuk peranti tablet. |
+| `service-worker.js` | Pengurus Cache untuk kestabilan fungsi 100% Offline. |
 
 ---
 
-## 🔧 Cara Pemasangan (Deployment)
+## 🔧 Panduan Pemasangan (Deployment)
 
-1.  **Clone Repo**: Muat naik semua fail ke dalam satu repository GitHub.
-2.  **Enable GitHub Pages**: Pergi ke `Settings > Pages` dan aktifkan branch `main`.
-3.  **Install as App**:
-    * Buka URL GitHub Pages anda di Chrome (Android) atau Safari (iOS).
+1.  **Muat Naik**: Simpan semua fail di atas ke dalam satu repository GitHub (Contoh: `Augmented-Minimal-HUD`).
+2.  **GitHub Pages**: Aktifkan di `Settings > Pages`.
+3.  **Install App**:
+    * Buka URL anda di Chrome (Android) atau Safari (iOS).
     * Pilih **"Add to Home Screen"**.
-    * Aplikasi kini akan muncul di skrin utama tablet/telefon anda sebagai OS Kiosk yang penuh.
+    * Luncurkan dari skrin utama untuk mod **Full Kiosk** (tanpa URL bar).
 
 ---
 
-## 🔐 Log Masuk Lalai (Default Credentials)
+## 🔐 Kredensial Pilot Default
 
-Gunakan maklumat berikut untuk ujian awal sistem:
-
-* **Pilot**: COMMANDER 2050
-* **PIN**: `2050`
+| Pilot | PIN |
+| :--- | :--- |
+| **COMMANDER 2050** | `2050` |
+| **GUEST PILOT** | `1234` |
 
 ---
 
 ## 📡 Visi Solid 2050
-> *"Menghasilkan algoritma tetingkap tuntas yang tidak bergantung kepada awan (Cloud), memberikan kawalan mutlak kepada pilot di jalan raya."*
+> *"Menghasilkan algoritma tetingkap tuntas yang tidak bergantung kepada awan (Cloud), memberikan kawalan mutlak kepada pilot di jalan raya dengan latensi sifar."*
 
 ---
 **Developed by Gemini Solid 2050 Collaborator**
