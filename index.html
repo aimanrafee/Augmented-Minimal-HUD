@@ -19,7 +19,7 @@
     <div id="login-screen" class="auth-overlay">
         <div class="auth-box">
             <h1 class="hud-text medium">SYSTEM AUTHENTICATION</h1>
-            <p class="hud-text small" style="color: #555;">SOLID 2050 OS CORE</p>
+            <p class="hud-text small" style="color: #555; margin-bottom: 30px;">SOLID 2050 OS CORE</p>
             
             <div id="user-selection" class="user-grid">
                 </div>
@@ -38,10 +38,11 @@
     </div>
 
     <div id="main-hud" class="hidden">
+        
         <div class="hud-container">
             <div class="hud-header">
                 <span id="system-time" class="hud-text small">00:00</span>
-                <span id="signal-status" class="hud-text small">📶 HUB_CONNECTED</span>
+                <span id="signal-status" class="hud-text small">📶 NODE_ACTIVE</span>
                 <span id="battery-status" class="hud-text small">🔋 100%</span>
             </div>
 
@@ -50,43 +51,71 @@
                     <span id="current-speed" class="hud-text speed-value">00</span>
                     <span class="hud-text speed-unit">KM/H</span>
                 </div>
-                <div class="direction-display">
-                    <span id="current-direction" class="hud-text medium">N</span>
-                </div>
-                <div class="algorithm-status">
-                    <p class="hud-text small" style="color: var(--accent-color);">[ SOLID ALGORITHM ACTIVE ]</p>
-                </div>
+                <div id="current-direction" class="hud-text medium">N</div>
             </div>
 
             <div class="hud-footer">
-                <span id="nav-info" class="hud-text small">DESTINATION: SCANNING...</span>
+                <span id="nav-info" class="hud-text small">ALGORITHM: STANDBY</span>
             </div>
         </div>
 
-        <div class="control-panel">
-            <button id="toggle-mirror" class="control-button">🔄 MIRROR HUD</button>
-            <button id="toggle-dialer" class="control-button">📞 SMART DIALER</button>
-            <button onclick="location.reload()" class="control-button" style="background: #440000; color: white;">🔒 LOCK SYSTEM</button>
-        </div>
-    </div>
-
-    <div id="dialer-overlay" class="dialer-overlay hidden">
-        <div class="dialer-keypad">
-            <div class="dialer-display" id="dialer-input"></div>
-            <div class="keys">
-                <button class="key">1</button><button class="key">2</button><button class="key">3</button>
-                <button class="key">4</button><button class="key">5</button><button class="key">6</button>
-                <button class="key">7</button><button class="key">8</button><button class="key">9</button>
-                <button class="key">*</button><button class="key">0</button><button class="key">#</button>
-                <button class="key call-button">CALL</button>
-                <button class="key delete-button">DEL</button>
-                <button class="key close-dialer">EXIT</button>
+        <div id="window-dialer" class="window hidden">
+            <div class="window-header">
+                <span class="window-title">COMMUNICATION_LINK</span>
+                <div class="window-controls">
+                    <button onclick="closeWindow('window-dialer')">✖</button>
+                </div>
+            </div>
+            <div class="window-content dialer-content">
+                <div class="dialer-display" id="dialer-input"></div>
+                <div class="keys">
+                    <button class="key">1</button><button class="key">2</button><button class="key">3</button>
+                    <button class="key">4</button><button class="key">5</button><button class="key">6</button>
+                    <button class="key">7</button><button class="key">8</button><button class="key">9</button>
+                    <button class="key">*</button><button class="key">0</button><button class="key">#</button>
+                    <button class="key call-button">CALL</button>
+                    <button class="key delete-button">DEL</button>
+                </div>
             </div>
         </div>
-    </div>
 
-    <script src="auth.js"></script>
+        <div id="window-stats" class="window hidden">
+            <div class="window-header">
+                <span class="window-title">ALGORITHM_MONITOR</span>
+                <div class="window-controls">
+                    <button onclick="closeWindow('window-stats')">✖</button>
+                </div>
+            </div>
+            <div class="window-content">
+                <p class="hud-text small" style="color: var(--accent-color);">[ ANALYSING OFFLINE_JSON ]</p>
+                <div class="stat-bar"><div class="stat-fill" style="width: 70%;"></div></div>
+                <p style="font-size: 0.8em; color: #555;">Processing Neural Node 2050...</p>
+            </div>
+        </div>
+
+        <div class="system-dock">
+            <button class="dock-item" onclick="toggleWindow('window-dialer')">📞</button>
+            <button class="dock-item" onclick="toggleWindow('window-stats')">📊</button>
+            <button class="dock-item" id="toggle-mirror">🔄 MIRROR</button>
+            <button class="dock-item" onclick="location.reload()" style="color: #ff4444;">🔒 LOCK</button>
+        </div>
+
+    </div> <script src="auth.js"></script>
     <script src="app.js"></script>
-
+    <script>
+        // Fungsi Pantas untuk Multi-Window
+        function toggleWindow(id) {
+            const win = document.getElementById(id);
+            win.classList.toggle('hidden');
+            if (!win.classList.contains('hidden')) {
+                // Bawa ke depan
+                document.querySelectorAll('.window').forEach(w => w.style.zIndex = "10");
+                win.style.zIndex = "100";
+            }
+        }
+        function closeWindow(id) {
+            document.getElementById(id).classList.add('hidden');
+        }
+    </script>
 </body>
 </html>
